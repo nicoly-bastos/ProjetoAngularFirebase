@@ -11,5 +11,37 @@ import { MessageService } from '../services/message.service';
 })
 export class HomePage {
 
-  constructor(){ }
+  constructor(){ 
+    this.getFuncionarios();
+  }
+
+  isLoading: boolean = false;
+  funcionarios: any;
+  
+    getFuncionarios(){
+    
+      let funcionario = { CodFun: '1' };
+  
+      fetch('http://localhost/api/v1/listar_funcionarios.php',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(funcionario)
+        }
+      )
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        this.funcionarios = response.funcionarios;
+      })
+      .catch(erro => {
+        console.log(erro);
+      })
+
+      .finally(()=>{
+        this.isLoading = false;
+      })
+    }
 }
